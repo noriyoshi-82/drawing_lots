@@ -3,7 +3,7 @@ window.addEventListener('load', function(){
   let c = document.createElement("canvas");
   let ctx = c.getContext("2d");
 
-  c.width = 600;
+  c.width = 800;
   c.height = 500;
 
   let size = 40

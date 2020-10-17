@@ -4,7 +4,9 @@ window.addEventListener('load', function(){
   let ctx = c.getContext("2d");
 
   c.width = 600;
-  c.height = 400;
+  c.height = 500;
+
+  let size = 40
 
   document.body.appendChild(c);
 
@@ -26,29 +28,75 @@ window.addEventListener('load', function(){
   let player = new function () {
     this.x = c.width / 2;
     this.y = 0;
+    this.ySpeed = 0;
     this.rot = 0;
+    this.rSpeed = 0;
 
     this.img = new Image();
-    this.img.src = "images/car.png";
+    this.img.src = "/image.png";
 
-    this.draw = function () {
-      ctx.drawImage(this.imag, this.x, 100);
+    this.draw = function() {
+      let p1 = c.height - noise(t + this.x) * 0.25;
+      let p2 = c.height - noise(t + 5 + this.x) * 0.25;
+
+      let grounded = 0;
+
+      if(p1 - size > this.y) {
+        this.ySpeed += 0.1;
+      } else {
+        this.ySpeed -= this.y - (p1 - size);
+        this.y = p1 - size;
+
+        grounded = 1;
+      }
+
+      if(!playing || grounded && Math.abs(this.rot) > Math.PI * 0.5) {
+        playing = false;
+        this.rSpeed = 5;
+        k.ArrowUp = 1;
+        this.x -= speed * 5;
+      }
+
+      let angle = Math.atan2((p2 - size) - this.y, (this.x + 5) - this.x);
+
+      this.y += this.ySpeed;
+
+      if(grounded && playing) {
+        this.rot -= (this.rot - angle) * 0.5;
+        this.rSpeed = this.rSpeed - (angle - this.rot);
+      }
+
+      this.rSpeed += (k.ArrowLeft - k.ArrowRight) * 0.05;
+      this.rot -= this.rSpeed * 0.1;
+
+      if(this.rot > Math.PI) this.rot = -Math.PI;
+      if(this.rot < -Math.PI) this.rot = Math.PI;
+
+      ctx.save();
+      ctx.translate(this.x, this.y);
+      ctx.rotate(this.rot);
+      ctx.drawImage(this.img, -15, -15, 60, 60);
+      ctx.restore();
     }
   }
 
-  let t = 0
-  function loop() {
+  let t = 0;
+  let speed = 0;
+  let playing = true;
+  let k = {ArrowUp: 0, ArrowDown: 0, ArrowLeft: 0, ArrowRight: 0};
 
-    t += 1;
-    ctx.fillStyle = "#19f";
+  function loop() {
+    speed -= (speed - (k.ArrowUp - k.ArrowDown)) * 0.1;
+    t += 10 * speed;
+    ctx.fillStyle = "skyblue";
     ctx.fillRect(0, 0, c.width, c.height);
 
-    ctx.fillStyle = "black"
+    ctx.fillStyle = "#19f";
 
     ctx.beginPath();
-    ctx.moveTo(0, c.height)
+    ctx.moveTo(0, c.height);
 
-    for (let i = 0; i< c.width; i++) {
+    for (let i = 0; i < c.width; i++) {
       ctx.lineTo(i, c.height - noise(t + i) * 0.25);
     }
 
@@ -59,6 +107,11 @@ window.addEventListener('load', function(){
     player.draw();
     requestAnimationFrame(loop);
   }
+
+  onkeydown = d => k[d.key] = 1;
+  onkeyup = d => k[d.key] = 0;
+
+
   loop();
 });
   

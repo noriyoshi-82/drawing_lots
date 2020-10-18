@@ -2,13 +2,14 @@ window.addEventListener('load', function(){
 
   let c = document.createElement("canvas");
   let ctx = c.getContext("2d");
+  const field = document.getElementById('gameField');
 
   c.width = 800;
   c.height = 500;
 
   let size = 40
 
-  document.body.appendChild(c);
+  field.appendChild(c);
 
   let perm = [];
 

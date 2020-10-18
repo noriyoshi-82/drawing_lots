@@ -3,7 +3,6 @@ class MainsController < ApplicationController
   end
 
   def show
-    
   end
   
 end

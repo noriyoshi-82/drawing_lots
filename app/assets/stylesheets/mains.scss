@@ -1,21 +1,33 @@
 .content { 
   text-align: center;
 
-h2 {
-  color: red;
-}
-
-#restart {
-  text-decoration: none;
-  color: green;
-  width: 130px;
-  margin: auto;
-  font-size: 20px;
-  padding: 10px 0px;
-  display: block;
-  &:hover {
-    background-color: rgb(250, 250, 228);
+  #title {
+    margin-top: 40px;
+    font-size: 30px;
   }
-}
+
+  #gameField {
+    margin-top: 10px;
+  }
+
+  h2 {
+    color: red;
+  }
+
+  #restart {
+    width: 130px;
+    margin: auto;
+    font-size: 20px;
+    padding: 10px 0px;
+    display: block;
+    border-radius: 5%;
+    &:hover {
+      background-color: rgb(247, 228, 216);
+    }
+  a {
+    text-decoration: none;
+    color: rgb(59, 148, 243);
+  }
+  }
 
 }
